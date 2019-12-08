@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        /* 大容器 */
+        .container {
+            width: 60vw;
+            height: 30vw;
+            position: relative;
+            overflow: hidden;
+            border: 0.8vw solid;
+            border-image: repeating-linear-gradient(45deg, yellow 0, yellow 2%, green 2%, green 4%) 3% 1.5% stretch;
+            border-image-width: 3% 1.5%;
+        }
+
+        /* 小圆点父容器 */
+        .container>.unit {
+            height: 4vw;
+            width: 20vw;
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translate(-50%)
+        }
+
+        /* 小圆点样式 */
+        .container>.unit>li.cl {
+            width: 1vw;
+            height: 1vw;
+            border: 1px solid transparent;
+            border-radius: 50%;
+            float: left;
+            margin-left: 6%;
+            list-style: none;
+            background-color: rgba(245, 240, 240, .5);
+        }
+
+        /* 小圆点 鼠标移过去的样式 */
+        .container>.unit>li.cur {
+            position: relative;
+            transform: scale(1.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+
+        }
+
+        /* 轮播图父容器 */
+        .container>.imgs {
+            box-sizing: content-box;
+            position: relative;
+        }
+
+        /* 图片li绝对定位top：0 */
+        .imgs li {
+            width: 100%;
+            list-style: none;
+            position: absolute;
+            top: 0;
+
+        }
+
+        /* 设置轮播图样式 */
+        .imgs li img {
+            width: 100%;
+            display: none;
+
+        }
+
+        /* 让第一张图片显示 */
+        .imgs li img.active {
+            display: block;
+        }
+
+        /* 左右按钮 */
+        .btns .l,
+        .btns .r {
+            width: 3.6vw;
+            height: 4vw;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+            background: rgba(10, 10, 10, 0.438);
+            border-radius: 0 100% 100% 0;
+
+        }
+
+        .btns .r {
+            left: 100%;
+            transform: translate(-100%, -50%);
+            border-radius: 100% 0 0 100%;
+        }
+
+        /* a标签里的符号 */
+        .btns .l::after,
+        .btns .r::after {
+            content: '';
+            width: 1.3vw;
+            height: 1.3vw;
+            position: absolute;
+            top: 50%;
+            transform: translate(50%, -50%) rotate(225deg);
+            border-top: 0.5vw solid rgba(255, 255, 255, 0.671);
+            border-right: 0.5vw solid rgba(255, 255, 255, 0.671);
+        }
+
+        .btns .r::after {
+            right: 0;
+            transform: translate(-50%, -50%) rotate(45deg);
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 轮播的图片 -->
+        <ul class="imgs">
+            <li><img class="active" src="imgs/bg/0.jpg" alt=""></li>
+            <li><img src="imgs/bg/1.jpg" alt=""></li>
+            <li><img src="imgs/bg/2.jpg" alt=""></li>
+            <li><img src="imgs/bg/3.jpg" alt=""></li>
+            <li><img src="imgs/bg/4.jpg" alt=""></li>
+            <li><img src="imgs/bg/5.jpg" alt=""></li>
+        </ul>
+        <!-- 小圆点 -->
+        <ul class="unit">
+            <li class="cl"></li>
+            <li class="cl"></li>
+            <li class="cl"></li>
+            <li class="cl"></li>
+            <li class="cl"></li>
+            <li class="cl"></li>
+        </ul>
+        <!-- 左右按钮 -->
+        <div class="btns">
+            <a href="#" class="l"></a>
+            <a href="#" class="r"></a>
+        </div>
+    </div>
+    <script>
+        // 获得容器的对象
+        var container = document.getElementsByClassName('container')[0];
+        //获得所有图片
+        var imgs = document.getElementsByTagName('img');
+        // console.log(imgs);
+        //获取所有小圆点
+        var circles = document.getElementsByClassName('cl');
+        //获取左右键
+        var btnL = document.getElementsByClassName('l')[0];
+        var btnR = document.getElementsByClassName('r')[0];
+        // console.log(btnL)
+
+        //声明信号量
+        var idx = 0;
+
+        //封装一个函数 只有索引为idx的图片显示并对应相关小圆点
+        function change() {
+            //默认 所有都不显示
+            for (var i = 0; i < imgs.length; i++) {
+                imgs[i].style.display = 'none'
+                circles[i].setAttribute('class', 'cl');
+            }
+            //只有索引为idx的图片显示
+            imgs[idx].style.display = 'block'
+            //对应的小圆点改变
+            circles[idx].setAttribute('class', 'cl cur');
+        }
+        //左键-点击
+        btnL.onclick = function () {
+            //点击左键 信号量减小
+            idx--;
+            //当idx小于0时，idx为imgs最后一个的下标/索引，当不小于0时，idx不变
+            idx = idx < 0 ? imgs.length - 1 : idx;
+            change();
+            // for (var i = 0; i < imgs.length; i++) {
+            //     imgs[i].style.display = 'none'
+            // }
+
+        }
+        //右键-点击
+        btnR.onclick = function () {
+            idx++;
+            idx = idx > imgs.length - 1 ? 0 : idx;
+            change();
+        }
+
+        //点击小圆点 & 鼠标移动到小圆点
+        for (var i = 0; i < circles.length; i++) {
+            //给每个小圆点添加一个属性index（小圆点对应的索引）
+            circles[i].index = i;
+
+            //点击小圆点
+            circles[i].onclick = function () {
+                idx = this.index;
+                change();
+            }
+
+            //鼠标移动到小圆点
+            circles[i].onmouseover = function () {
+                for (var i = 0; i < imgs.length; i++) {
+                    circles[i].setAttribute('class', 'cl');
+                }
+                //对应的小圆点改变
+                this.setAttribute('class', 'cl cur');
+            }
+        }
+
+        //周期执行
+        //500毫秒执行一次demo函数
+        var timer = setInterval(demo, 800)
+        console.log(timer)
+
+        //电脑端 & 移动端 不同
+        if (innerWidth > 1020) {
+            //当鼠标移入大容器 函数循环停止
+            container.onmouseenter = function () {
+                clearInterval(timer)
+            }
+            //当鼠标移出大容器 函数循环开始
+            container.onmouseleave = function () {
+                timer = setInterval(demo, 800)
+            }
+        } else {
+            var j = 2;
+            container.onclick = function () {
+                clearInterval(timer);
+                setTimeout(function () {
+                    timer = setInterval(demo, 800)
+                }, 2000)
+            }
+        }
+
+
+
+
+
+
+
+
+        function demo() {
+            idx++;
+            idx = idx < circles.length ? idx : 0;
+            change();
+            return 1;
+        }
+        console.log(innerWidth > 1020);
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
