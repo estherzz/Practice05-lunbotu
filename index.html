@@ -238,22 +238,13 @@
             container.onmouseleave = function () {
                 timer = setInterval(demo, 800)
             }
-        } else {
-            var j = 2;
+        }  else {
             container.onclick = function () {
                 clearInterval(timer);
-                setTimeout(function () {
-                    timer = setInterval(demo, 800)
-                }, 2000)
+                timer = setInterval(demo, 2000)
             }
+
         }
-
-
-
-
-
-
-
 
         function demo() {
             idx++;
@@ -261,13 +252,6 @@
             change();
             return 1;
         }
-        console.log(innerWidth > 1020);
-
-
-
-
-
-
 
     </script>
 </body>
