@@ -229,7 +229,7 @@
         console.log(timer)
 
         //电脑端 & 移动端 不同
-        if (innerWidth > 1020) {
+        if (innerWidth > 640) {
             //当鼠标移入大容器 函数循环停止
             container.onmouseenter = function () {
                 clearInterval(timer)
@@ -238,12 +238,14 @@
             container.onmouseleave = function () {
                 timer = setInterval(demo, 800)
             }
-        }  else {
+        }   else {
             container.onclick = function () {
                 clearInterval(timer);
-                timer = setInterval(demo, 2000)
+                clearInterval(timer2);
+                timer2 = setTimeout(function () {
+                    timer = window.setInterval(demo, 800)
+                }, 3000)
             }
-
         }
 
         function demo() {
